@@ -87,20 +87,20 @@ def clam_val_loop(model, loader, retrun_WSI_feature = False, return_WSI_attn=Fal
 
 
 parser = argparse.ArgumentParser(description='Configurations for WSI Training')
-parser.add_argument('--data_root_dir', type=str, default='/home/guestdj/sdc/TCGA_Pancancer/CONCH/TCGA_KIRC', 
+parser.add_argument('--data_root_dir', type=str, default='/home/guestdj/sdc/TCGA_Pancancer/CONCH/TCGA_COADREAD', 
                     help='Data directory to WSI features (extracted via CLAM)')
-parser.add_argument('--results_dir', default='./results13', help='results directory (default: ./results)')
-parser.add_argument('--split_dir', type=str, default='/home/guestdj/nvme3n1/DJ/Survival_baseline/splits/TCGA_KIRC', 
+parser.add_argument('--results_dir', default='./results', help='results directory (default: ./results)')
+parser.add_argument('--split_dir', type=str, default='./splits/TCGA_COADREAD', 
                     help='manually specify the set of splits to use')
-parser.add_argument('--csv_path', type=str, default='/home/guestdj/nvme3n1/DJ/Survival_baseline/dataset_csv/TCGA_KIRC_processed.csv', help='csv file containing the dataset')
+parser.add_argument('--csv_path', type=str, default='./dataset_csv/TCGA_COADREAD_processed.csv', help='csv file containing the dataset')
 parser.add_argument('--k_fold', type=bool, default=True, help='k fold for cross validation')
 parser.add_argument('--k', type=int, default=5, help='number of folds (default: 10)')
-parser.add_argument('--model_type', type=str, default='HGIMamba', help='type of model')
-parser.add_argument('--mode', type = str, choices=['path', 'mIF', 'multi-modal', 'CMTA', 'ours'], default='multi-modal', help='which modalities to use')
+parser.add_argument('--model_type', type=str, default='HGP-Mamba', help='type of model')
+parser.add_argument('--mode', type = str, choices=['path', 'mIF', 'multi-modal'], default='multi-modal', help='which modalities to use')
 parser.add_argument('--fusion', type=str, choices=['None', 'concat', 'IFBlock'], default='None', help='Type of fusion. (Default: None).')
-parser.add_argument('--exp_code', type=str, default='HGIMamba', help='experiment code for saving results')
+parser.add_argument('--exp_code', type=str, default='HGP-Mamba', help='experiment code for saving results')
 parser.add_argument('--seed', type=int, default=42, help='random seed (default: 42)')
-parser.add_argument('--task', default='TCGA_KIRC', type=str, help='which dataset to use (default: TCGA_KIRC)')
+parser.add_argument('--task', default='TCGA_COADREAD', type=str, help='which dataset to use (default: TCGA_KIRC)')
 
 args = parser.parse_args()
 
@@ -178,22 +178,15 @@ for i in range(args.k):
     df_data['censorship'] = df_data['censorship'].map({0: 1, 1: 0})
 
     # ============================================================
-    # 2. 合并
+    # 2. merge
     # ============================================================
     df = pd.merge(df_risk, df_data, on='slide_id', how='inner')
     df.rename(columns={'censorship': 'event', 'survival_months': 'time'}, inplace=True)
 
     # ============================================================
-    # 3. 按 case_id 聚合 risk（核心）
-    # ============================================================
-    # df_patient = df.groupby('case_id').agg({
-    #     'risk': 'mean',
-    #     'time': 'first',
-    #     'event': 'first'
-    # }).reset_index()
 
     # ============================================================
-    # 4. 根据中位数分组 High / Low
+    # 4. High / Low
     # ============================================================
     median_risk = df['risk'].median()
     df['risk_group'] = np.where(df['risk'] >= median_risk, 'High', 'Low')
@@ -202,7 +195,7 @@ for i in range(args.k):
     low_risk_group  = df[df['risk_group'] == 'Low']
 
     # ============================================================
-    # 5. Kaplan-Meier 绘图
+    # 5. Kaplan-Meier curve
     # ============================================================
     kmf = KaplanMeierFitter()
 
@@ -243,7 +236,7 @@ for i in range(args.k):
 
     p_value = results.p_value
 
-    # 显示 p-value
+    # p-value
     plt.text(
         0.02, 0.02,
         f'p-value: {p_value:.2e}',
@@ -254,22 +247,15 @@ for i in range(args.k):
     )
 
     # ============================================================
-    # 7. 美化
+    # 7. modify
     # ============================================================
     name = args.task.replace('_', '-')
     plt.title(name, fontsize=24)
     plt.xlabel('Time (months)', fontsize=20)
     plt.ylabel('Survival Probability', fontsize=20)
-    # 调整刻度字体和图例字体大小
     ax = plt.gca()
-    ax.tick_params(axis='both', which='major', labelsize=14)   # x/y 主刻度字体
-    # 放大图例字体
+    ax.tick_params(axis='both', which='major', labelsize=14)   
     legend = ax.legend(fontsize=16)
- 
-    # 添加 number at risk 表格
-    # kmf_low = KaplanMeierFitter().fit(low_risk_group['time'], low_risk_group['event'])
-    # kmf_high = KaplanMeierFitter().fit(high_risk_group['time'], high_risk_group['event'])
-    # add_at_risk_counts(kmf_low, kmf_high)
 
     plt.tight_layout()
     plt.savefig(f'{args.results_dir}/{i}/survival_analysis{i}_fold_all.png', dpi=300, bbox_inches='tight')
