@@ -406,7 +406,7 @@ class Generic_MIL_Survival_Dataset(Generic_WSI_Survival_Dataset):
                     for slide_id in slide_ids:
                         WSI_path = os.path.join(data_dir, 'HNE_features', '{}.pt'.format(slide_id))
                         WSI_bag = torch.load(WSI_path)
-                        mIF_path = os.path.join(data_dir, 'mIF_features', '{}.pt'.format(slide_id))
+                        mIF_path = os.path.join(data_dir, 'protein_features', '{}.pt'.format(slide_id))
                         mIF_bag = torch.load(mIF_path)
                         bag = {'WSI': WSI_bag, 'mIF': mIF_bag}
                         WSI_features.append(bag['WSI'])
