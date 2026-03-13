@@ -36,8 +36,8 @@
 > In this work, we develop a protein feature extractor (PFE) that derives high-throughput protein features directly from WSIs using pretrained foundation models [ROISE](https://gitlab.com/enable-medicine-public/rosie.git).
 
 1. Use the WSI processing tool provided by [CLAM](https://github.com/mahmoodlab/CLAM) to create non-overlapping patches of size $128 \times 128$ for every single WSI
-2. Download the pretrained weights for [ROISE](https://gitlab.com/enable-medicine-public/rosie.git)
-3. To extract protein features, specify the argument in the [bash](https://github.com/Daijing-ai/HGP-Mamba/blob/main/PFE/run.bash) and run the command:
+2. Download the pretrained weights for [PFE](https://huggingface.co/ericwu09/ROSIE/blob/main/best_model_single.pth)
+3. To extract protein features, specify the argument in the [bash](https://github.com/Daijing-ai/HGP-Mamba/blob/main/PFE/pfe.bash) and run the command:
 ```shell
 > cd ./PFE
 > bash pfe.sh
@@ -74,8 +74,8 @@ CUDA_VISIBLE_DEVICES=<DEVICE_ID> python main_survival.py \
 ## Acknowledgements
 Huge thanks to the authors of following open-source projects:
 - [CLAM](https://github.com/mahmoodlab/CLAM)
-- [MambaMIL](https://github.com/mahmoodlab/MambaMIL)
-- [ROISE](https://gitlab.com/enable-medicine-public/rosie.git)
+- [MambaMIL](https://github.com/isyangshu/MambaMIL)
+- [ROISE](https://gitlab.com/enable-medicine-public/rosie)
 
 
 This code is available for non-commercial academic purposes. If you have any question, feel free to email [Jing Dai](daijing@mail.dlut.edu.cn).
