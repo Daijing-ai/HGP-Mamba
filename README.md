@@ -20,9 +20,9 @@
 > conda install pytorch==2.2.2 torchvision==0.17.2 torchaudio==2.2.2 pytorch-cuda=11.8 -c pytorch -c nvidia
 ```
 * Install causal-conv1d
-> Install `whl.` file from [here](https://github.com/Dao-AILab/causal-conv1d/releases) and find the corresponding version of your python and cuda.
+> Download `whl.` file from [here](https://github.com/Dao-AILab/causal-conv1d/releases) and install offline. Note that you should find the corresponding version of your python and cuda
 * Install mamba-ssm
-> Install `whl.` file from [here](https://github.com/state-spaces/mamba/releases) and find the corresponding version of your python and cuda.
+> Download `whl.` file from [here](https://github.com/state-spaces/mamba/releases) and install offline. Note that you should find the corresponding version of your python and cuda
 * Other requirements
 > The version of other requirements can be found in `environment.yml`.
 
@@ -30,19 +30,19 @@
 ### WSIs
 1. Download diagnostic WSIs from [TCGA](https://portal.gdc.cancer.gov/)
 2. Use the WSI processing tool provided by [CLAM](https://github.com/mahmoodlab/CLAM) to extract CONCH pretrained 512-dim feature for each 256 $\times$ 256 patch (20x), which is then saved as `.pt` files for each WSI
-3. Save the result in the `HNE_features` folder
+3. Save the results in the `HNE_features` folder
 
 ### protein data
 > In this work, we develop a protein feature extractor (PFE) that derives high-throughput protein features directly from WSIs using pretrained foundation models [ROISE](https://gitlab.com/enable-medicine-public/rosie.git).
 
 1. Use the WSI processing tool provided by [CLAM](https://github.com/mahmoodlab/CLAM) to create non-overlapping patches of size $128 \times 128$ for every single WSI
-2. Download the pretrained weights for [PFE](https://huggingface.co/ericwu09/ROSIE/blob/main/best_model_single.pth)
+2. Download the [pretrained weights](https://huggingface.co/ericwu09/ROSIE/blob/main/best_model_single.pth) for PFE
 3. To extract protein features, specify the argument in the [bash](https://github.com/Daijing-ai/HGP-Mamba/blob/main/PFE/pfe.bash) and run the command:
 ```shell
 > cd ./PFE
 > bash pfe.sh
 ```
-4. Save the result in the `protein_features` folder
+4. Save the results in the `protein_features` folder
 
 The final structure of datasets should be as following:
 ```bash
