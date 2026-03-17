@@ -2,6 +2,8 @@
 
 ![](./figs/overview.png)
 ## NEWS
+**2025-03-17**: Congratulations! Our paper is accepted by IEEE ICME 2026!
+
 **2025-03-13**: We released the full version of HGP-Mamba, including models and scripts.
 
 ## Abstract
