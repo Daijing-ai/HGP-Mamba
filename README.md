@@ -1,7 +1,12 @@
 # HGP-Mamba: Integrating Histology and Generated Protein Features for Mamba-based Multimodal Survival Risk Prediction
 
+![GitHub last commit](https://img.shields.io/github/last-commit/Daijing-ai/HGP-Mamba?style=flat-square)
+[![Arxiv Page](https://img.shields.io/badge/Arxiv-2603.16421-red?style=flat-square)](https://arxiv.org/abs/2603.16421v2)
+
 ![](./figs/overview.png)
 ## NEWS
+**2025-03-19**: We released the arxiv version of the paper which includes additional supplementary experiments and extended discussions.
+
 **2025-03-17**: Congratulations! Our paper is accepted by IEEE ICME 2026!
 
 **2025-03-13**: We released the full version of HGP-Mamba, including models and scripts.
@@ -28,7 +33,7 @@
 * Other requirements
 > The version of other requirements can be found in `environment.yml`.
 
-## Data preparation
+## Data preprocessing
 ### WSIs
 1. Download diagnostic WSIs from [TCGA](https://portal.gdc.cancer.gov/)
 2. Use the WSI processing tool provided by [CLAM](https://github.com/mahmoodlab/CLAM) to extract CONCH pretrained 512-dim feature for each 256 $\times$ 256 patch (20x), which is then saved as `.pt` files for each WSI
